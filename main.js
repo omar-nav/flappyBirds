@@ -64,26 +64,47 @@ class Flappy {
     if (this.y < canvas.height - 50) this.y += this.gravity;
     ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
   }
+} //clase flappy
+class Pipe {
+  constructor(y, height, pipeName = "pipe2") {
+    this.x = canvas.width - 50;
+    this.y = y ? y : 0;
+    this.width = 50;
+    this.height = height || 100;
+    this.image = new Image();
+    this.image.src = images[pipeName];
+    this.image.onload = () => {
+      this.draw();
+    };
+  }
+  draw() {
+    ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+  }
 }
 // SON OBJETOS(INSTANCIAS)
 // DE CLASES!!
 var board = new Board();
 var flappy = new Flappy();
+var pipe = new Pipe();
 
 // funciones principales
 function update() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   board.draw();
   flappy.draw();
+  pipe.draw();
 }
 function start() {
   interval = setInterval(update, 1000 / 60);
 }
 
 addEventListener("keydown", function(e) {
-  if (e.keyCode === 32) {
+  if (e.keyCode === 32 && e.keyCode) {
     flappy.y -= 70;
   }
+  // if (flappy.y === 512 && flappy.x === 100) {
+  //   flappy.y = 40;
+  // }
 });
 start();
 
