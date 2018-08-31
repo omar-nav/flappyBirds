@@ -70,6 +70,17 @@ class Flappy {
     if (this.y < canvas.height - 50) this.y += this.gravity;
     ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
   }
+  crashWith(item) {
+    console.log("chocando");
+    console.log(this.x);
+    console.log(item.x);
+    return (
+      this.x < item.x + item.width &&
+      this.x + this.width > item.x &&
+      this.y < item.y + item.height &&
+      this.y + this.height > item.y
+    );
+  }
 } //clase flappy
 class Pipe {
   constructor(y, height, pipeName = "pipe2") {
@@ -93,25 +104,34 @@ class Pipe {
 var board = new Board();
 var flappy = new Flappy();
 //var pipe = new Pipe(100, 300, "pipe1");
-
-// funciones principales
-function update() {
-  frames++;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  board.draw();
-  //var fla;
-  // pipe.draw();
-  flappy.draw();
-  drawPipes();
-  generatePipes();
-}
 function start() {
+  pipes = [];
   interval = setInterval(update, 1000 / 60);
+}
+function gameOver() {
+  clearInterval(interval);
+  ctx.font = "200px Avenir";
+  ctx.fillText("Game Over ", 50, 250);
+  ctx.font = "50px Avenir";
+  ctx.fillStyle = "yellow";
+  ctx.fillText("Press 'esc' to restart ", 50, 300);
+}
+
+function checkCollitions() {
+  pipes.forEach(function(pipe) {
+    console.log(pipe);
+    if (flappy.crashWith(pipe)) {
+      gameOver();
+    }
+  });
 }
 
 addEventListener("keydown", function(e) {
-  if (e.keyCode === 32 && e.keyCode) {
+  if (e.keyCode === 32) {
     flappy.y -= 50;
+  }
+  if (e.keyCode === 27) {
+    start();
   }
   // if (flappy.x === 100 && flappy.y === 512) {
   //   flappy.y = 0;
@@ -126,7 +146,7 @@ function generatePipes() {
     var alto = Math.floor(Math.random() * 400) + 20;
     var topPipe = new Pipe(y, alto, "pipe2");
     // 2 establecer el espacio donde pasa flappy
-    var window = 100;
+    var window = 150;
     var alto2 = canvas.height - (window + alto);
     // 3 generar el tubo de abajo
     var bottomPipe = new Pipe(canvas.height - alto2, alto2, "pipe1");
@@ -146,3 +166,17 @@ function drawPipes() {
 }
 
 // los observadores
+
+// funciones principales
+function update() {
+  frames++;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  board.draw();
+  //var fla;
+  // pipe.draw();
+  flappy.draw();
+  drawPipes();
+  generatePipes();
+  //flappy.crashWith();
+  checkCollitions();
+}
