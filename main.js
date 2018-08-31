@@ -58,8 +58,10 @@ class Flappy {
     this.image.onload = () => {
       this.draw();
     };
+    this.gravity = 3;
   }
   draw() {
+    if (this.y < canvas.height - 50) this.y += this.gravity;
     ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
   }
 }
@@ -77,7 +79,14 @@ function update() {
 function start() {
   interval = setInterval(update, 1000 / 60);
 }
+
+addEventListener("keydown", function(e) {
+  if (e.keyCode === 32) {
+    flappy.y -= 70;
+  }
+});
 start();
+
 // funciones auxiliares
 
 // los observadores
