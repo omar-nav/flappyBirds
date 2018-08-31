@@ -5,6 +5,7 @@ ctx.fillRect(100, 120, 180, 100);
 ctx.fillStyle;
 
 // variables globales
+var pipes = [];
 var interval;
 var frames;
 var images = {
@@ -78,6 +79,7 @@ class Pipe {
     };
   }
   draw() {
+    this.x -= 2;
     ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
   }
 }
@@ -91,8 +93,10 @@ var pipe = new Pipe(100, 300, "pipe1");
 function update() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   board.draw();
+  // pipe.draw();
   flappy.draw();
-  pipe.draw();
+  drawPipes();
+  generatePipes();
 }
 function start() {
   interval = setInterval(update, 1000 / 60);
@@ -109,5 +113,27 @@ addEventListener("keydown", function(e) {
 start();
 
 // funciones auxiliares
+function generatePipes() {
+  // 1 generar el tubo de arriba
+  // var pipe = new Pipe(100, 300, "pipe1");
+  var y = 0;
+  var alto = Math.floor(Math.random * 400) + 20;
+  var topPipe = new Pipe(y, alto, "pipe2");
+  // 2 establecer el espacio donde pasa flappy
+  var window = 100;
+  var alto2 = canvas.height - (window + alto);
+  // 3 generar el tubo de abajo
+  var bottomPipe = new Pipe(canvas.height - alto2, alto2, "pipe1");
+
+  // 4 donde jodidos pongo los tubos
+  pipes.push(bottomPipe);
+  pipes.push(topPipe);
+}
+
+function drawPipes() {
+  pipes.forEach(function(pipe) {
+    pipe.draw();
+  });
+}
 
 // los observadores
