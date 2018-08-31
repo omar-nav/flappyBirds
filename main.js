@@ -85,7 +85,7 @@ class Pipe {
 // DE CLASES!!
 var board = new Board();
 var flappy = new Flappy();
-var pipe = new Pipe();
+var pipe = new Pipe(100, 300, "pipe1");
 
 // funciones principales
 function update() {
@@ -102,8 +102,8 @@ addEventListener("keydown", function(e) {
   if (e.keyCode === 32 && e.keyCode) {
     flappy.y -= 70;
   }
-  // if (flappy.y === 512 && flappy.x === 100) {
-  //   flappy.y = 40;
+  // if (flappy.x === 100 && flappy.y === 512) {
+  //   flappy.y = 0;
   // }
 });
 start();
