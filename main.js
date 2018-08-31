@@ -1,13 +1,13 @@
 var canvas = document.getElementsByTagName("canvas")[0];
 var ctx = canvas.getContext("2d");
 
-ctx.fillRect(100, 120, 180, 100);
-ctx.fillStyle;
+//ctx.fillRect(100, 120, 180, 100);
+// ctx.fillStyle;
 
 // variables globales
 var pipes = [];
 var interval;
-var frames;
+var frames = 0;
 var images = {
   bg:
     "https://github.com/ironhack-labs/lab-canvas-flappybirds/blob/master/starter_code/images/bg.png?raw=true",
@@ -38,6 +38,11 @@ class Board {
     this.x--;
     if (this.x < -canvas.width) this.x = 0;
     ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+
+    ctx.font = "50px Avenir";
+    ctx.fillStyle = "white";
+    ctx.fillText(Math.floor(frames / 60), 60, 100, 100);
+
     ctx.drawImage(
       this.image,
       this.x + this.width,
@@ -87,12 +92,14 @@ class Pipe {
 // DE CLASES!!
 var board = new Board();
 var flappy = new Flappy();
-var pipe = new Pipe(100, 300, "pipe1");
+//var pipe = new Pipe(100, 300, "pipe1");
 
 // funciones principales
 function update() {
+  frames++;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   board.draw();
+  //var fla;
   // pipe.draw();
   flappy.draw();
   drawPipes();
@@ -104,7 +111,7 @@ function start() {
 
 addEventListener("keydown", function(e) {
   if (e.keyCode === 32 && e.keyCode) {
-    flappy.y -= 70;
+    flappy.y -= 50;
   }
   // if (flappy.x === 100 && flappy.y === 512) {
   //   flappy.y = 0;
@@ -114,20 +121,22 @@ start();
 
 // funciones auxiliares
 function generatePipes() {
+  if (frames % 200 === 0) {
+    var y = 0;
+    var alto = Math.floor(Math.random() * 400) + 20;
+    var topPipe = new Pipe(y, alto, "pipe2");
+    // 2 establecer el espacio donde pasa flappy
+    var window = 100;
+    var alto2 = canvas.height - (window + alto);
+    // 3 generar el tubo de abajo
+    var bottomPipe = new Pipe(canvas.height - alto2, alto2, "pipe1");
+
+    // 4 donde jodidos pongo los tubos
+    pipes.push(bottomPipe);
+    pipes.push(topPipe);
+  }
   // 1 generar el tubo de arriba
   // var pipe = new Pipe(100, 300, "pipe1");
-  var y = 0;
-  var alto = Math.floor(Math.random() * 400) + 20;
-  var topPipe = new Pipe(y, alto, "pipe2");
-  // 2 establecer el espacio donde pasa flappy
-  var window = 100;
-  var alto2 = canvas.height - (window + alto);
-  // 3 generar el tubo de abajo
-  var bottomPipe = new Pipe(canvas.height - alto2, alto2, "pipe1");
-
-  // 4 donde jodidos pongo los tubos
-  pipes.push(bottomPipe);
-  pipes.push(topPipe);
 }
 
 function drawPipes() {
