@@ -117,7 +117,7 @@ function generatePipes() {
   // 1 generar el tubo de arriba
   // var pipe = new Pipe(100, 300, "pipe1");
   var y = 0;
-  var alto = Math.floor(Math.random * 400) + 20;
+  var alto = Math.floor(Math.random() * 400) + 20;
   var topPipe = new Pipe(y, alto, "pipe2");
   // 2 establecer el espacio donde pasa flappy
   var window = 100;
